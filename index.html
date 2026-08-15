@@ -10,15 +10,15 @@
 <style>
   :root{
     /* SPIDEY THEME COLORS */
-    --bg:#06080F; /* Deep night sky */
-    --surface:#101423; /* Dark blue-black surface */
+    --bg:#06080F; 
+    --surface:#101423; 
     --surface-2:#181E32;
     --line:#2A3249;
     --text:#F0F2F8;
     --muted:#9CA6C3;
-    --accent:#0055FF; /* Web-shooter Blue */
+    --accent:#0055FF; 
     --accent-dim:#002B80;
-    --red:#E30022; /* Spider-Man Red */
+    --red:#E30022; 
     --red-dim:#66000F;
     --amber:#FFC107;
   }
@@ -35,34 +35,58 @@
   h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em;}
   .mono{font-family:'JetBrains Mono',monospace;}
   a{color:inherit; text-decoration:none;}
-  ::selection{background:var(--red); color:#fff;} /* Red highlight */
+  ::selection{background:var(--red); color:#fff;}
   .wrap{max-width:960px; margin:0 auto; padding:0 28px; position:relative;}
 
   /* SPIDER-VERSE GLITCH EFFECT ON HOVER */
-  .glitch-hover { transition: text-shadow 0.2s ease, transform 0.2s ease; }
+  .glitch-hover { transition: text-shadow 0.2s ease, transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
   .glitch-hover:hover {
     text-shadow: 2px 0px 0px rgba(227,0,34,0.8), -2px 0px 0px rgba(0,85,255,0.8);
-    transform: scale(1.01);
+    transform: scale(1.02);
   }
 
-  /* REVEAL-ON-SCROLL (FIXED CLIP-PATH) */
+  /* WEB-TETHER DECORATIONS (Makes elements look stuck to the UI) */
+  .web-stuck {
+    position: relative;
+  }
+  .web-stuck::before, .web-stuck::after {
+    content: '';
+    position: absolute;
+    width: 60px; height: 60px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,50 50,100 0,100 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><path d="M0,0 L70,0 C70,35 35,70 0,70 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><path d="M0,0 L40,0 C40,20 20,40 0,40 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><line x1="0" y1="0" x2="80" y2="80" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><line x1="0" y1="0" x2="95" y2="30" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><line x1="0" y1="0" x2="30" y2="95" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/></svg>');
+    background-size: cover;
+    pointer-events: none;
+    z-index: 10;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  .web-stuck::before { top: -5px; left: -5px; transform-origin: top left; }
+  .web-stuck::after { bottom: -5px; right: -5px; transform: rotate(180deg); transform-origin: center; }
+  .web-stuck:hover::before { transform: scale(1.1) rotate(-5deg); }
+  .web-stuck:hover::after { transform: rotate(180deg) scale(1.1) rotate(-5deg); }
+
+  /* REVEAL-ON-SCROLL (Elastic/Bouncy Animation) */
   .reveal{opacity:1;}
   .js-anim .reveal{
     opacity:0;
     clip-path: polygon(0 0, 0 0, 0% 100%, 0 100%);
-    transform:translateY(10px) rotate(-3deg);
-    transform-origin:top center;
-    transition:opacity .85s cubic-bezier(.34,1.56,.64,1), clip-path .85s cubic-bezier(.16,1,.3,1), transform .85s cubic-bezier(.34,1.56,.64,1);
+    transform:translateY(30px) scale(0.95);
+    transform-origin:center;
+    /* Elastic easing to simulate web tension */
+    transition:opacity .6s ease-out, clip-path .8s cubic-bezier(0.68, -0.55, 0.265, 1.55), transform .8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
-  /* BUG FIX APPLIED HERE: clip-path opens to 100% 100% */
   .js-anim .reveal.in{
     opacity:1;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transform:translateY(0) rotate(0deg);
+    transform:translateY(0) scale(1);
   }
-  .js-anim .reveal.from-right{clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); transform:translateY(10px) rotate(3deg); transform-origin:top center;}
-  /* BUG FIX APPLIED HERE: clip-path starts at 0 0 */
-  .js-anim .reveal.from-right.in{clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform:translateY(0) rotate(0deg);}
+  .js-anim .reveal.from-right{
+    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); 
+    transform:translateY(30px) scale(0.95); 
+  }
+  .js-anim .reveal.from-right.in{
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
+    transform:translateY(0) scale(1);
+  }
 
   /* SPOTLIGHT */
   #spotlight{
@@ -145,17 +169,17 @@
   .hero-links{display:flex; gap:14px; flex-wrap:wrap;}
   .btn{
     font-family:'JetBrains Mono',monospace; font-size:13px; padding:11px 18px; border-radius:6px;
-    display:inline-flex; align-items:center; gap:8px; transition:all .2s; border:1px solid transparent; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px; transition:all .2s cubic-bezier(0.68, -0.55, 0.265, 1.55); border:1px solid transparent; cursor:pointer;
   }
   .btn-solid{background:var(--red); color:#fff; font-weight:600; box-shadow:0 0 15px rgba(227,0,34,0.3);}
-  .btn-solid:hover{background:#ff1a3c; transform:translateY(-2px) scale(1.02); box-shadow:0 6px 22px -4px rgba(227,0,34,0.55);}
+  .btn-solid:hover{background:#ff1a3c; transform:translateY(-3px) scale(1.05); box-shadow:0 6px 22px -4px rgba(227,0,34,0.55);}
   .btn-line{border-color:var(--line); color:var(--text); background:none;}
-  .btn-line:hover{border-color:var(--accent); color:#fff; background:rgba(0,85,255,0.1); box-shadow:0 0 10px rgba(0,85,255,0.2);}
+  .btn-line:hover{border-color:var(--accent); color:#fff; background:rgba(0,85,255,0.1); box-shadow:0 0 10px rgba(0,85,255,0.2); transform:translateY(-3px) scale(1.05);}
 
   /* PHOTO FRAME */
   .photo-frame{
     position:relative; border-radius:14px; overflow:hidden; border:2px solid var(--line);
-    background:var(--surface); transition:transform .4s ease, border-color .4s ease, box-shadow .4s ease;
+    background:var(--surface); transition:transform .5s cubic-bezier(0.68, -0.55, 0.265, 1.55), border-color .4s ease, box-shadow .4s ease;
     transform:rotate(-2deg); margin-top:6px;
   }
   .photo-frame::before{
@@ -163,10 +187,10 @@
     background:linear-gradient(135deg, var(--red) 0%, transparent 40%, transparent 60%, var(--accent) 100%);
     opacity:0.65; filter:blur(4px);
   }
-  .photo-frame:hover{transform:rotate(0deg) translateY(-4px); border-color:var(--accent); box-shadow: 0 10px 25px rgba(0,85,255,0.2);}
+  .photo-frame:hover{transform:rotate(2deg) translateY(-8px) scale(1.02); border-color:var(--accent); box-shadow: 0 15px 35px rgba(0,85,255,0.3);}
   .photo-frame img{width:100%; display:block; filter:grayscale(10%) contrast(1.1);}
-  .web-ring{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0.35; mix-blend-mode:screen; transition:opacity .4s, transform .8s ease;}
-  .photo-frame:hover .web-ring{opacity:0.7; transform:scale(1.05) rotate(5deg);}
+  .web-ring{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; opacity:0.35; mix-blend-mode:screen; transition:opacity .4s, transform .8s cubic-bezier(0.68, -0.55, 0.265, 1.55);}
+  .photo-frame:hover .web-ring{opacity:0.7; transform:scale(1.1) rotate(15deg);}
   .photo-tag{
     position:absolute; bottom:14px; left:14px; right:14px;
     background:rgba(6,8,15,0.85); backdrop-filter:blur(6px);
@@ -184,16 +208,16 @@
   .pnode{
     font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text);
     background:var(--surface-2); border:1px solid var(--line); border-radius:20px;
-    padding:8px 16px; white-space:nowrap; cursor:pointer; transition:all .2s;
+    padding:8px 16px; white-space:nowrap; cursor:pointer; transition:all .3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
-  .pnode:hover, .pnode.active{border-color:var(--accent); color:var(--accent); background:rgba(0,85,255,0.1); box-shadow:0 0 10px rgba(0,85,255,0.3);}
+  .pnode:hover, .pnode.active{border-color:var(--accent); color:var(--accent); background:rgba(0,85,255,0.1); box-shadow:0 0 10px rgba(0,85,255,0.3); transform:scale(1.05);}
   .parrow{color:var(--red); padding:0 10px; font-size:14px;}
   .pdetail{
     margin-top:18px; padding:16px 18px; background:var(--surface); border:1px solid var(--accent-dim); border-radius:10px;
-    font-size:13.5px; color:var(--muted); max-height:0; overflow:hidden; opacity:0; transition:all .3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-size:13.5px; color:var(--muted); max-height:0; overflow:hidden; opacity:0; transition:all .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5); transform: translateY(-10px);
   }
-  .pdetail.open{max-height:120px; opacity:1; padding:16px 18px;}
+  .pdetail.open{max-height:120px; opacity:1; padding:16px 18px; transform: translateY(0);}
   .pdetail b{color:var(--accent);}
 
   /* SECTIONS */
@@ -208,9 +232,10 @@
   .sec-rule{flex:1; height:1px; background:var(--line);}
 
   /* EXPERIENCE */
-  .xp-item{display:grid; grid-template-columns:170px 1fr; gap:24px; padding:26px 0; border-bottom:1px solid var(--line); transition: background 0.3s;}
-  .xp-item:hover{background: rgba(0,85,255,0.02);}
-  .xp-item:last-child{border-bottom:none;}
+  .xp-item{display:grid; grid-template-columns:170px 1fr; gap:24px; padding:26px 20px; border:1px solid transparent; border-bottom:1px solid var(--line); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);}
+  .xp-item:hover{background: rgba(0,85,255,0.02); border-color: rgba(0,85,255,0.2); border-radius: 8px; transform: scale(1.01);}
+  .xp-item:last-child{border-bottom:1px solid transparent;}
+  .xp-item:hover:last-child{border-bottom:1px solid rgba(0,85,255,0.2);}
   .xp-date{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--accent); padding-top:3px;}
   .xp-role{font-size:17px; font-weight:600; margin-bottom:2px; color:var(--text);}
   .xp-org{color:var(--muted); font-size:14.5px; margin-bottom:12px;}
@@ -228,7 +253,7 @@
   .proj-card:nth-child(even){margin-top:38px;}
   .proj-card{
     background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:24px;
-    transition:border-color .25s, transform .25s, box-shadow .25s; cursor:pointer; position:relative; z-index:1;
+    transition:border-color .4s, transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55), box-shadow .4s; cursor:pointer; position:relative; z-index:1;
     box-shadow:0 0 0 rgba(0,0,0,0);
   }
   .proj-card::before{
@@ -238,7 +263,8 @@
     -webkit-mask-composite:xor; mask-composite:exclude;
     opacity:0; transition:opacity .3s; pointer-events:none;
   }
-  .proj-card:hover{transform:translateY(-3px); box-shadow:0 14px 30px -12px rgba(0,85,255,0.4);}
+  /* Elastic Hover Simulation */
+  .proj-card:hover{transform:translateY(-6px) scale(1.02) rotate(0.5deg); box-shadow:0 14px 30px -12px rgba(0,85,255,0.4);}
   .proj-card:hover::before{opacity:1;}
   .proj-card::after{
     content:''; position:absolute; top:14px; left:14px; width:0; height:0;
@@ -255,34 +281,36 @@
   .proj-card:nth-child(even) .proj-anchor{left:-28px;}
   .proj-top{display:flex; justify-content:space-between; align-items:flex-start;}
   .proj-date{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--red); margin-bottom:8px; font-weight:600; text-shadow: 0 0 4px rgba(227,0,34,0.3);}
-  .proj-toggle{color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:16px; transition:transform .3s;}
-  .proj-card.open .proj-toggle{transform:rotate(45deg); color:var(--accent);}
+  .proj-toggle{color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:16px; transition:transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);}
+  .proj-card.open .proj-toggle{transform:rotate(135deg); color:var(--accent);}
   .proj-title{font-size:16px; font-weight:600; margin-bottom:10px; line-height:1.35; color:var(--text);}
   .proj-desc{color:var(--muted); font-size:13.5px; margin-bottom:16px;}
-  .proj-more{max-height:0; overflow:hidden; transition:max-height .35s ease, margin .35s ease;}
-  .proj-card.open .proj-more{max-height:200px; margin-bottom:14px;}
+  .proj-more{max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(0.68, -0.55, 0.265, 1.55), margin .4s ease;}
+  .proj-card.open .proj-more{max-height:250px; margin-bottom:14px;}
   .proj-more p{color:var(--muted); font-size:13px; line-height:1.6;}
   .chip-row{display:flex; flex-wrap:wrap; gap:6px;}
   .chip{
     font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--text); background:var(--surface-2);
-    border:1px solid var(--line); border-radius:4px; padding:4px 8px; transition:border-color 0.2s;
+    border:1px solid var(--line); border-radius:4px; padding:4px 8px; transition:border-color 0.2s, transform 0.2s;
   }
   .proj-card:hover .chip { border-color: rgba(0,85,255,0.3); }
 
   /* SKILLS */
   .skill-groups{display:grid; grid-template-columns:1fr 1fr; gap:28px 40px;}
+  .skill-group{padding: 20px; border: 1px solid transparent; border-radius: 12px; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);}
+  .skill-group:hover{border-color: rgba(227,0,34,0.2); background: rgba(227,0,34,0.02); transform: scale(1.02);}
   .skill-group h3{font-size:13px; font-family:'JetBrains Mono',monospace; color:var(--red); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px; font-weight:500;}
   .skill-chips{display:flex; flex-wrap:wrap; gap:7px;}
   .skill-chips span{
     font-size:13px; color:var(--text); background:var(--surface-2); border:1px solid var(--line);
-    border-radius:6px; padding:5px 10px; transition:all .2s; cursor:default;
+    border-radius:6px; padding:5px 10px; transition:all .3s cubic-bezier(0.68, -0.55, 0.265, 1.55); cursor:default;
   }
-  .skill-chips span:hover{border-color:var(--accent); color:#fff; background:var(--accent-dim); transform:translateY(-1px); box-shadow:0 4px 10px rgba(0,85,255,0.3);}
+  .skill-chips span:hover{border-color:var(--accent); color:#fff; background:var(--accent-dim); transform:translateY(-3px) scale(1.05); box-shadow:0 4px 10px rgba(0,85,255,0.3);}
 
   /* EDU / CERTS */
   .edu-cert-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
-  .edu-item{margin-bottom:18px; padding-left:14px; border-left:2px solid var(--line); transition:border-color 0.3s;}
-  .edu-item:hover{border-left-color:var(--red);}
+  .edu-item{margin-bottom:18px; padding-left:14px; border-left:2px solid var(--line); transition:border-color 0.3s, transform 0.3s;}
+  .edu-item:hover{border-left-color:var(--red); transform: translateX(5px);}
   .edu-item .t{font-weight:600; font-size:15px; color:var(--text);}
   .edu-item .s{color:var(--muted); font-size:13.5px;}
   .edu-item .d{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--accent); margin-top:2px;}
@@ -298,11 +326,11 @@
     position:fixed; bottom:24px; right:24px; width:42px; height:42px; border-radius:50%;
     background:var(--surface); border:1px solid var(--accent-dim); color:var(--accent);
     display:flex; align-items:center; justify-content:center; cursor:pointer;
-    opacity:0; pointer-events:none; transition:all .3s; z-index:40; font-size:18px; font-weight:bold;
+    opacity:0; pointer-events:none; transition:all .4s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index:40; font-size:18px; font-weight:bold;
     box-shadow: 0 4px 15px rgba(0,85,255,0.2);
   }
   #back-top.show{opacity:1; pointer-events:auto;}
-  #back-top:hover{border-color:var(--accent); background:var(--accent); color:#fff; transform:translateY(-2px); box-shadow: 0 6px 20px rgba(0,85,255,0.4);}
+  #back-top:hover{border-color:var(--accent); background:var(--accent); color:#fff; transform:translateY(-5px) scale(1.1); box-shadow: 0 8px 20px rgba(0,85,255,0.4);}
 
   @media(max-width:760px){
     .hero-grid{grid-template-columns:1fr;}
@@ -375,7 +403,6 @@
         <rect class="bldg" x="850" y="15" width="34" height="105"/>
         <rect class="bldg" x="888" y="50" width="50" height="70"/>
         <rect class="bldg" x="942" y="60" width="58" height="60"/>
-        <!-- windows generated by JS -->
       </g>
     </svg>
   </div>
@@ -413,7 +440,7 @@
             <line x1="150" y1="150" x2="256.1" y2="256.1"/>
           </g>
         </svg>
-        <img src="image_1ca1e5.png" alt="Abin Anil" onerror="this.src='https://via.placeholder.com/300x300/101423/F0F2F8?text=ABIN+ANIL'">
+        <img src="Abin Anil Profile.jpg" alt="Abin Anil" onerror="this.src='https://via.placeholder.com/300x300/101423/F0F2F8?text=ABIN+ANIL'">
         <div class="photo-tag"><span>Kottayam, Kerala</span><span>IST</span></div>
       </div>
     </div>
@@ -438,7 +465,7 @@
   <div class="wrap">
     <div class="sec-head reveal glitch-hover"><span class="sec-num">01</span><h2>Experience</h2><span class="sec-rule"></span></div>
 
-    <div class="xp-item reveal">
+    <div class="xp-item web-stuck reveal">
       <div class="xp-date">Aug 2024 — Present</div>
       <div>
         <div class="xp-role">Technical Support Engineer</div>
@@ -453,7 +480,7 @@
       </div>
     </div>
 
-    <div class="xp-item reveal">
+    <div class="xp-item web-stuck reveal">
       <div class="xp-date">Nov 2025 — Jun 2026</div>
       <div>
         <div class="xp-role">Data Science &amp; AI Intern</div>
@@ -475,7 +502,7 @@
     <p class="reveal mono" style="color:var(--muted); font-size:13px; margin-top:-24px; margin-bottom:28px;">Click a card to expand.</p>
 
     <div class="proj-grid">
-      <div class="proj-card reveal"><div class="proj-anchor"></div>
+      <div class="proj-card web-stuck reveal"><div class="proj-anchor"></div>
         <div class="proj-top"><div class="proj-date">AUG 2026</div><div class="proj-toggle">+</div></div>
         <div class="proj-title">Enterprise AI Career Platform &amp; Autonomous Job Workforce Agent</div>
         <div class="proj-desc">Multi-agent career platform with streaming, batch, and warehouse layers.</div>
@@ -483,7 +510,7 @@
         <div class="chip-row"><span class="chip">Kafka</span><span class="chip">Spark</span><span class="chip">Snowflake</span><span class="chip">LangGraph</span><span class="chip">pgvector</span><span class="chip">FastAPI</span></div>
       </div>
 
-      <div class="proj-card reveal"><div class="proj-anchor"></div>
+      <div class="proj-card web-stuck reveal"><div class="proj-anchor"></div>
         <div class="proj-top"><div class="proj-date">AUG 2026</div><div class="proj-toggle">+</div></div>
         <div class="proj-title">Autonomous Healthcare ITSM Resolution Engine</div>
         <div class="proj-desc">Zero-marginal-cost ticket triage on a fine-tuned local LLM.</div>
@@ -491,7 +518,7 @@
         <div class="chip-row"><span class="chip">Llama-3</span><span class="chip">Unsloth</span><span class="chip">QLoRA</span><span class="chip">HNSW</span><span class="chip">FastAPI</span><span class="chip">Docker</span></div>
       </div>
 
-      <div class="proj-card reveal"><div class="proj-anchor"></div>
+      <div class="proj-card web-stuck reveal"><div class="proj-anchor"></div>
         <div class="proj-top"><div class="proj-date">JUL 2026</div><div class="proj-toggle">+</div></div>
         <div class="proj-title">FIFA World Cup 2026 Enterprise AI &amp; Simulation Platform</div>
         <div class="proj-desc">Multi-container microservice stack on GCP Cloud Run.</div>
@@ -499,7 +526,7 @@
         <div class="chip-row"><span class="chip">Docker Compose</span><span class="chip">Jenkins</span><span class="chip">Cloud Run</span><span class="chip">LangGraph</span><span class="chip">Gemini API</span></div>
       </div>
 
-      <div class="proj-card reveal"><div class="proj-anchor"></div>
+      <div class="proj-card web-stuck reveal"><div class="proj-anchor"></div>
         <div class="proj-top"><div class="proj-date">MAY 2026</div><div class="proj-toggle">+</div></div>
         <div class="proj-title">AI-Powered Supply Chain Risk Predictor</div>
         <div class="proj-desc">Forecasting freight delays on a class-imbalanced dataset.</div>
@@ -515,27 +542,27 @@
     <div class="sec-head reveal glitch-hover"><span class="sec-num">03</span><h2>Skills</h2><span class="sec-rule"></span></div>
 
     <div class="skill-groups">
-      <div class="skill-group reveal">
+      <div class="skill-group web-stuck reveal">
         <h3>Generative AI &amp; LLM Engineering</h3>
         <div class="skill-chips"><span>RAG Pipelines</span><span>LangChain</span><span>LangGraph</span><span>Agentic AI</span><span>Transformers</span><span>QLoRA / PEFT</span><span>Unsloth</span><span>Hugging Face</span><span>Gemini API</span></div>
       </div>
-      <div class="skill-group reveal">
+      <div class="skill-group web-stuck reveal">
         <h3>Vector &amp; Data Stores</h3>
         <div class="skill-chips"><span>FAISS</span><span>pgvector</span><span>HNSW</span><span>Semantic Search</span><span>Snowflake</span><span>PostgreSQL</span></div>
       </div>
-      <div class="skill-group reveal">
+      <div class="skill-group web-stuck reveal">
         <h3>Data Engineering</h3>
         <div class="skill-chips"><span>Apache Kafka</span><span>Apache Spark</span><span>Pandas</span><span>NumPy</span><span>SQLAlchemy</span></div>
       </div>
-      <div class="skill-group reveal">
+      <div class="skill-group web-stuck reveal">
         <h3>MLOps &amp; Cloud</h3>
         <div class="skill-chips"><span>Docker</span><span>Jenkins CI/CD</span><span>GCP Cloud Run</span><span>Microservices</span><span>pytest</span></div>
       </div>
-      <div class="skill-group reveal">
+      <div class="skill-group web-stuck reveal">
         <h3>Classical ML / NLP</h3>
         <div class="skill-chips"><span>TensorFlow</span><span>Scikit-Learn</span><span>XGBoost</span><span>NLTK</span><span>spaCy</span></div>
       </div>
-      <div class="skill-group reveal">
+      <div class="skill-group web-stuck reveal">
         <h3>Systems &amp; Support Tooling</h3>
         <div class="skill-chips"><span>ServiceNow</span><span>Kibana</span><span>Grafana</span><span>Postman</span><span>Swagger</span><span>ITIL</span></div>
       </div>
@@ -618,7 +645,7 @@ window.addEventListener('scroll', () => {
   navLinks.forEach(a => a.classList.toggle('active', a.dataset.sec === current));
 });
 
-// ---- reveal on scroll — FIX APPLIED FOR CLIPPED TEXT ----
+// ---- REPEATING ELASTIC REVEAL ANIMATIONS ON SCROLL ----
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 document.querySelectorAll('.xp-item.reveal').forEach((el, i) => { if (i % 2 === 1) el.classList.add('from-right'); });
@@ -635,11 +662,17 @@ document.querySelectorAll('.xp-item.reveal').forEach((el, i) => { if (i % 2 === 
 if (reduceMotion) {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
 } else {
+  // NEW OBSERVER: Adds AND removes the 'in' class so animations repeat every time you scroll to them.
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, {threshold:0.12});
+    entries.forEach(e => { 
+      // Toggle the 'in' class based on visibility
+      e.target.classList.toggle('in', e.isIntersecting); 
+    });
+  }, {
+    threshold: 0.1, 
+    rootMargin: "0px 0px -50px 0px" // Triggers slightly before the item hits the very bottom of the screen
+  });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-  setTimeout(() => document.querySelectorAll('.reveal').forEach(el => el.classList.add('in')), 4000);
 }
 
 // ---- spotlight tracking (whole page) ----
@@ -649,7 +682,7 @@ window.addEventListener('pointermove', e => {
   spotlight.style.setProperty('--sy', e.clientY + 'px');
 });
 
-// ---- web-strand cursor trail (SPIDEY WEB-SHOOTER UPDATE) ----
+// ---- web-strand cursor trail ----
 if (!reduceMotion) {
   const wc = document.getElementById('webtrail');
   const wctx = wc.getContext('2d');
@@ -665,13 +698,12 @@ if (!reduceMotion) {
     wctx.clearRect(0,0,wc.width,wc.height);
     for (let i=1; i<trail.length; i++){
       const a = trail[i-1], b = trail[i];
-      const age = (Date.now() - b.t) / 500; // Faster fade like snapping webs
+      const age = (Date.now() - b.t) / 500; 
       const alpha = Math.max(0, 0.6 - age);
       if (alpha <= 0) continue;
       
-      // White/Silver webs with Spidey Blue glowing shadows
       wctx.strokeStyle = 'rgba(255,255,255,' + alpha + ')';
-      wctx.lineWidth = i % 2 === 0 ? 1.5 : 0.8; // Uneven thickness like organic webbing
+      wctx.lineWidth = i % 2 === 0 ? 1.5 : 0.8; 
       wctx.shadowColor = '#0055FF';
       wctx.shadowBlur = 6;
       
@@ -764,7 +796,7 @@ document.getElementById('copyEmail').addEventListener('click', function(){
   });
 });
 
-// ---- vector-space canvas background (SPIDER-SENSE UPDATE) ----
+// ---- vector-space canvas background ----
 if (!reduceMotion) {
   const canvas = document.getElementById('vectorfield');
   const ctx = canvas.getContext('2d');
@@ -804,7 +836,6 @@ if (!reduceMotion) {
         const dx = points[i].x - points[j].x, dy = points[i].y - points[j].y;
         const d = Math.sqrt(dx*dx+dy*dy);
         if (d < 140){
-          // Silver/White background web strands
           ctx.strokeStyle = 'rgba(255,255,255,' + (0.12*(1-d/140)) + ')';
           ctx.lineWidth = 1;
           ctx.beginPath(); ctx.moveTo(points[i].x, points[i].y); ctx.lineTo(points[j].x, points[j].y); ctx.stroke();
@@ -813,7 +844,6 @@ if (!reduceMotion) {
       const dxm = points[i].x - mouse.x, dym = points[i].y - mouse.y;
       const dm = Math.sqrt(dxm*dxm+dym*dym);
       if (dm < 180){
-        // Spider-sense red glow near the cursor
         ctx.strokeStyle = 'rgba(227,0,34,' + (0.45*(1-dm/180)) + ')';
         ctx.lineWidth = 1.5;
         ctx.beginPath(); ctx.moveTo(points[i].x, points[i].y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
