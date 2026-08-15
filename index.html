@@ -53,7 +53,7 @@
     content: '';
     position: absolute;
     width: 60px; height: 60px;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0,0 L100,0 C100,50 50,100 0,100 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><path d="M0,0 L70,0 C70,35 35,70 0,70 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><path d="M0,0 L40,0 C40,20 20,40 0,40 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><line x1="0" y1="0" x2="80" y2="80" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><line x1="0" y1="0" x2="95" y2="30" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/><line x1="0" y1="0" x2="30" y2="95" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/></svg>');
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0,0 L100,0 C100,50 50,100 0,100 Z' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cpath d='M0,0 L70,0 C70,35 35,70 0,70 Z' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cpath d='M0,0 L40,0 C40,20 20,40 0,40 Z' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cline x1='0' y1='0' x2='80' y2='80' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cline x1='0' y1='0' x2='95' y2='30' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cline x1='0' y1='0' x2='30' y2='95' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3C/svg%3E");
     background-size: cover;
     pointer-events: none;
     z-index: 10;
@@ -64,27 +64,17 @@
   .web-stuck:hover::before { transform: scale(1.1) rotate(-5deg); }
   .web-stuck:hover::after { transform: rotate(180deg) scale(1.1) rotate(-5deg); }
 
-  /* REVEAL-ON-SCROLL (Elastic/Bouncy Animation) */
+  /* REVEAL-ON-SCROLL (Elastic/Bouncy Animation - Fixed for reliable triggers) */
   .reveal{opacity:1;}
   .js-anim .reveal{
     opacity:0;
-    clip-path: polygon(0 0, 0 0, 0% 100%, 0 100%);
-    transform:translateY(30px) scale(0.95);
+    transform:translateY(40px) scale(0.95);
     transform-origin:center;
     /* Elastic easing to simulate web tension */
-    transition:opacity .6s ease-out, clip-path .8s cubic-bezier(0.68, -0.55, 0.265, 1.55), transform .8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition:opacity .5s ease-out, transform .7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
   .js-anim .reveal.in{
     opacity:1;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    transform:translateY(0) scale(1);
-  }
-  .js-anim .reveal.from-right{
-    clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); 
-    transform:translateY(30px) scale(0.95); 
-  }
-  .js-anim .reveal.from-right.in{
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
     transform:translateY(0) scale(1);
   }
 
@@ -201,19 +191,35 @@
   .photo-tag span:first-child{color:var(--accent);}
   .photo-tag span:last-child{color:var(--red);}
 
-  /* PIPELINE SIGNATURE STRIP */
+  /* PIPELINE SIGNATURE STRIP (FIXED TO SINGLE ROW) */
   .pipeline{margin-top:70px; padding:26px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); position:relative;}
   .pipeline-label{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--red); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:16px;}
-  .pipeline-flow{display:flex; align-items:center; flex-wrap:wrap; gap:0;}
+  
+  .pipeline-flow{
+    display:flex; 
+    align-items:center; 
+    flex-wrap:nowrap; /* Forces everything into a single line */
+    gap:0;
+    overflow-x:auto; /* Allows scrolling on smaller screens */
+    padding-bottom:12px; /* Leaves room for scrollbar */
+    scrollbar-width: thin; 
+    scrollbar-color: var(--red) var(--surface-2);
+  }
+  .pipeline-flow::-webkit-scrollbar { height: 6px; }
+  .pipeline-flow::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 4px; }
+  .pipeline-flow::-webkit-scrollbar-thumb { background: var(--red); border-radius: 4px; }
+
   .pnode{
-    font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text);
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text);
     background:var(--surface-2); border:1px solid var(--line); border-radius:20px;
-    padding:8px 16px; white-space:nowrap; cursor:pointer; transition:all .3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    padding:8px 14px; white-space:nowrap; cursor:pointer; transition:all .3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    flex-shrink: 0; /* Prevents text from being squished */
   }
   .pnode:hover, .pnode.active{border-color:var(--accent); color:var(--accent); background:rgba(0,85,255,0.1); box-shadow:0 0 10px rgba(0,85,255,0.3); transform:scale(1.05);}
-  .parrow{color:var(--red); padding:0 10px; font-size:14px;}
+  .parrow{color:var(--red); padding:0 10px; font-size:14px; flex-shrink:0;}
+  
   .pdetail{
-    margin-top:18px; padding:16px 18px; background:var(--surface); border:1px solid var(--accent-dim); border-radius:10px;
+    margin-top:8px; padding:16px 18px; background:var(--surface); border:1px solid var(--accent-dim); border-radius:10px;
     font-size:13.5px; color:var(--muted); max-height:0; overflow:hidden; opacity:0; transition:all .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     box-shadow: 0 4px 15px rgba(0,0,0,0.5); transform: translateY(-10px);
   }
@@ -648,13 +654,11 @@ window.addEventListener('scroll', () => {
 // ---- REPEATING ELASTIC REVEAL ANIMATIONS ON SCROLL ----
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-document.querySelectorAll('.xp-item.reveal').forEach((el, i) => { if (i % 2 === 1) el.classList.add('from-right'); });
+// Stagger child elements
 ['.proj-grid', '.skill-groups'].forEach(sel => {
   const grid = document.querySelector(sel);
   if (!grid) return;
   [...grid.children].forEach((el, i) => {
-    el.classList.add('reveal');
-    if (i % 2 === 1) el.classList.add('from-right');
     el.style.transitionDelay = (i * 90) + 'ms';
   });
 });
@@ -662,15 +666,19 @@ document.querySelectorAll('.xp-item.reveal').forEach((el, i) => { if (i % 2 === 
 if (reduceMotion) {
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
 } else {
-  // NEW OBSERVER: Adds AND removes the 'in' class so animations repeat every time you scroll to them.
+  // OBSERVER FIX: Safely toggles class so animations repeat, without breaking CSS rules
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { 
-      // Toggle the 'in' class based on visibility
-      e.target.classList.toggle('in', e.isIntersecting); 
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+      } else {
+        // Remove class when element exits the screen so the animation repeats on return
+        e.target.classList.remove('in');
+      }
     });
   }, {
-    threshold: 0.1, 
-    rootMargin: "0px 0px -50px 0px" // Triggers slightly before the item hits the very bottom of the screen
+    threshold: 0, 
+    rootMargin: "0px 0px -10% 0px" // Starts animating when the item is 10% from the bottom of the screen
   });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 }
