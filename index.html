@@ -513,7 +513,7 @@
         <div class="proj-top"><div class="proj-date">SEP 2026</div><div class="proj-toggle">+</div></div>
         <div class="proj-title">Nexus Intelligence Trading</div>
         <div class="proj-desc">AI-driven algorithmic trading platform for predictive market analysis and automated execution.</div>
-        <div class="proj-more"><p>Developed a high-frequency trading ecosystem leveraging deep learning models (LSTMs and Transformers) to analyze sequential market data and वित्तीय news sentiment. Engineered a robust backtesting framework to validate strategies against historical ticks, ensuring strict risk management protocols. Built an event-driven architecture for real-time data ingestion and low-latency order execution.</p></div>
+        <div class="proj-more"><p>Developed a high-frequency trading ecosystem leveraging deep learning models (LSTMs and Transformers) to analyze sequential market data and financial news sentiment. Engineered a robust backtesting framework to validate strategies against historical ticks, ensuring strict risk management protocols. Built an event-driven architecture for real-time data ingestion and low-latency order execution.</p></div>
         <div class="chip-row"><span class="chip">Python</span><span class="chip">PyTorch</span><span class="chip">Kafka</span><span class="chip">FastAPI</span><span class="chip">Docker</span><span class="chip">AWS</span></div>
       </div>
 
@@ -749,119 +749,133 @@ if (!reduceMotion) {
         const wy = y + 8 + r*(h-14)/rows;
         const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
         rect.setAttribute('class','window' + (Math.random() > 0.6 ? ' lit' : ''));
-To integrate the **Nexus Intelligence Trading** project into your portfolio, I have updated the code to insert it as the first item in your projects grid, keeping the chronological structure of your portfolio.
-
-I crafted the descriptions to match the technical and professional tone of your existing Github projects, focusing on deep learning engineering, infrastructure, and event-driven architecture suitable for an AI/ML Engineer profile.
-
-Here is the full updated code:
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abin Anil — AI Engineer</title>
-<script>document.documentElement.classList.add('js-anim');</script>
-<link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-<link href="[https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap](https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap)" rel="stylesheet">
-<style>
-  :root{
-    /* SPIDEY THEME COLORS */
-    --bg:#06080F; 
-    --surface:#101423; 
-    --surface-2:#181E32;
-    --line:#2A3249;
-    --text:#F0F2F8;
-    --muted:#9CA6C3;
-    --accent:#0055FF; 
-    --accent-dim:#002B80;
-    --red:#E30022; 
-    --red-dim:#66000F;
-    --amber:#FFC107;
+        rect.setAttribute('x', wx); rect.setAttribute('y', wy);
+        rect.setAttribute('width', 4); rect.setAttribute('height', 6);
+        g.appendChild(rect);
+        windows.push(rect);
+      }
+    }
+  });
+  if (!reduceMotion) {
+    setInterval(() => {
+      const n = windows[Math.floor(Math.random()*windows.length)];
+      if (n) n.classList.toggle('lit');
+    }, 350);
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Inter',sans-serif;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  h1,h2,h3{font-family:'Space Grotesk',sans-serif; font-weight:600; letter-spacing:-0.01em;}
-  .mono{font-family:'JetBrains Mono',monospace;}
-  a{color:inherit; text-decoration:none;}
-  ::selection{background:var(--red); color:#fff;}
-  .wrap{max-width:960px; margin:0 auto; padding:0 28px; position:relative;}
+})();
 
-  /* SPIDER-VERSE GLITCH EFFECT ON HOVER */
-  .glitch-hover { transition: text-shadow 0.2s ease, transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-  .glitch-hover:hover {
-    text-shadow: 2px 0px 0px rgba(227,0,34,0.8), -2px 0px 0px rgba(0,85,255,0.8);
-    transform: scale(1.02);
+// ---- typed role line ----
+const roles = ["RAG pipelines.", "agentic systems.", "MLOps infrastructure.", "vector search at scale."];
+const typedEl = document.getElementById('typedLine');
+let ri = 0, ci = 0, deleting = false;
+function typeLoop(){
+  const word = roles[ri];
+  if (!deleting) {
+    ci++;
+    if (ci > word.length) { deleting = true; setTimeout(typeLoop, 1400); return; }
+  } else {
+    ci--;
+    if (ci < 0) { deleting = false; ri = (ri+1) % roles.length; ci = 0; }
   }
+  typedEl.innerHTML = 'Building <b>' + word.slice(0, ci) + '</b><span id="typed-cursor"></span>';
+  setTimeout(typeLoop, deleting ? 40 : 70);
+}
+if (reduceMotion) {
+  typedEl.innerHTML = 'Building <b>RAG pipelines, agentic systems, and MLOps infrastructure.</b>';
+} else {
+  typeLoop();
+}
 
-  /* WEB-TETHER DECORATIONS (Makes elements look stuck to the UI) */
-  .web-stuck {
-    position: relative;
+// ---- interactive pipeline ----
+const pdetail = document.getElementById('pdetail');
+document.querySelectorAll('.pnode').forEach(node => {
+  node.addEventListener('click', () => {
+    const already = node.classList.contains('active');
+    document.querySelectorAll('.pnode').forEach(n => n.classList.remove('active'));
+    if (already) { pdetail.classList.remove('open'); return; }
+    node.classList.add('active');
+    pdetail.innerHTML = '<b>' + node.textContent + ':</b> ' + node.dataset.d;
+    pdetail.classList.add('open');
+  });
+});
+
+// ---- expandable project cards ----
+document.querySelectorAll('.proj-card').forEach(card => {
+  card.addEventListener('click', () => card.classList.toggle('open'));
+});
+
+// ---- copy email ----
+document.getElementById('copyEmail').addEventListener('click', function(){
+  navigator.clipboard.writeText('abinanil000@gmail.com').then(() => {
+    const orig = this.textContent;
+    this.textContent = 'Copied ✓';
+    setTimeout(() => this.textContent = orig, 1600);
+  });
+});
+
+// ---- vector-space canvas background ----
+if (!reduceMotion) {
+  const canvas = document.getElementById('vectorfield');
+  const ctx = canvas.getContext('2d');
+  const hero = document.querySelector('header.hero');
+  let W, H, points = [];
+  const N = 46;
+
+  function resize(){
+    W = canvas.width = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
   }
-  .web-stuck::before, .web-stuck::after {
-    content: '';
-    position: absolute;
-    width: 60px; height: 60px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' viewBox='0 0 100 100'%3E%3Cpath d='M0,0 L100,0 C100,50 50,100 0,100 Z' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cpath d='M0,0 L70,0 C70,35 35,70 0,70 Z' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cpath d='M0,0 L40,0 C40,20 20,40 0,40 Z' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cline x1='0' y1='0' x2='80' y2='80' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cline x1='0' y1='0' x2='95' y2='30' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3Cline x1='0' y1='0' x2='30' y2='95' stroke='rgba(255,255,255,0.15)' stroke-width='1.5'/%3E%3C/svg%3E");
-    background-size: cover;
-    pointer-events: none;
-    z-index: 10;
-    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  function init(){
+    points = [];
+    for (let i=0; i<N; i++){
+      points.push({
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-0.5)*0.25, vy: (Math.random()-0.5)*0.25
+      });
+    }
   }
-  .web-stuck::before { top: -5px; left: -5px; transform-origin: top left; }
-  .web-stuck::after { bottom: -5px; right: -5px; transform: rotate(180deg); transform-origin: center; }
-  .web-stuck:hover::before { transform: scale(1.1) rotate(-5deg); }
-  .web-stuck:hover::after { transform: rotate(180deg) scale(1.1) rotate(-5deg); }
+  let mouse = {x:-9999, y:-9999};
+  hero.addEventListener('mousemove', e => {
+    const r = hero.getBoundingClientRect();
+    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  });
+  hero.addEventListener('mouseleave', () => { mouse.x=-9999; mouse.y=-9999; });
 
-  /* REVEAL-ON-SCROLL (Elastic/Bouncy Animation - Fixed for reliable triggers) */
-  .reveal{opacity:1;}
-  .js-anim .reveal{
-    opacity:0;
-    transform:translateY(40px) scale(0.95);
-    transform-origin:center;
-    /* Elastic easing to simulate web tension */
-    transition:opacity .5s ease-out, transform .7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    points.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > W) p.vx *= -1;
+      if (p.y < 0 || p.y > H) p.vy *= -1;
+    });
+    for (let i=0; i<points.length; i++){
+      for (let j=i+1; j<points.length; j++){
+        const dx = points[i].x - points[j].x, dy = points[i].y - points[j].y;
+        const d = Math.sqrt(dx*dx+dy*dy);
+        if (d < 140){
+          ctx.strokeStyle = 'rgba(255,255,255,' + (0.12*(1-d/140)) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(points[i].x, points[i].y); ctx.lineTo(points[j].x, points[j].y); ctx.stroke();
+        }
+      }
+      const dxm = points[i].x - mouse.x, dym = points[i].y - mouse.y;
+      const dm = Math.sqrt(dxm*dxm+dym*dym);
+      if (dm < 180){
+        ctx.strokeStyle = 'rgba(227,0,34,' + (0.45*(1-dm/180)) + ')';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(points[i].x, points[i].y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+      }
+    }
+    points.forEach(p => {
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(frame);
   }
-  .js-anim .reveal.in{
-    opacity:1;
-    transform:translateY(0) scale(1);
-  }
+  resize(); init(); frame();
+  window.addEventListener('resize', () => { resize(); });
+}
+</script>
 
-  /* SPOTLIGHT */
-  #spotlight{
-    position:fixed; inset:0; z-index:2; pointer-events:none; mix-blend-mode:screen;
-    background: radial-gradient(circle 350px at var(--sx,50%) var(--sy,20%), rgba(227,0,34,0.06), rgba(0,85,255,0.06) 45%, transparent 70%);
-    transition:opacity .4s;
-  }
-  #webtrail{position:fixed; inset:0; z-index:3; pointer-events:none; filter: drop-shadow(0 0 4px rgba(0,85,255,0.5));}
-
-  /* BEACON */
-  .beacon-wrap{position:absolute; top:-40px; right:-40px; width:260px; height:260px; pointer-events:none; z-index:0; opacity:0.6;}
-  .beacon-sweep{
-    position:absolute; top:50%; left:50%; width:600px; height:3px; transform-origin:0 50%;
-    background:linear-gradient(90deg, rgba(227,0,34,0.2), transparent 75%);
-    animation:sweep 7s linear infinite;
-  }
-  @keyframes sweep{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
-  .beacon-dot{position:absolute; top:50%; left:50%; width:6px; height:6px; margin:-3px; border-radius:50%; background:var(--red); box-shadow:0 0 14px 4px rgba(227,0,34,0.6);}
-
-  /* SKYLINE */
-  .skyline{position:absolute; left:0; right:0; bottom:0; height:120px; z-index:0; opacity:0.9; pointer-events:none;}
-  .skyline svg{width:100%; height:100%; display:block;}
-  .skyline .bldg{fill:var(--surface-2);}
-  .skyline .window{fill:var(--amber); opacity:0.35; transition:opacity 1.2s ease;}
-  .skyline .window.lit{opacity:0.85;}
-
-  /* PROGRESS BAR */
-  #progress{position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg, var(--red), var(--accent)); width:0%; z-index:100; transition:width .1s linear;}
-
-  /* NAV
+</body>
+</html>
