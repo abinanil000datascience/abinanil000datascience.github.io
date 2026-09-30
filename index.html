@@ -131,7 +131,7 @@
     display:none; flex-direction:column; gap:0; background:var(--surface); border-bottom:1px solid var(--line);
     max-height:0; overflow:hidden; transition:max-height .3s ease;
   }
-  .mobile-nav.open{max-height:260px;}
+  .mobile-nav.open{max-height:420px;}
   .mobile-nav a{padding:16px 28px; border-bottom:1px solid var(--line); font-size:14px; color:var(--muted); display:block;}
 
   /* HERO */
@@ -321,6 +321,41 @@
   .edu-item .s{color:var(--muted); font-size:13.5px;}
   .edu-item .d{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--accent); margin-top:2px;}
 
+
+  /* RESUME CARDS */
+  .resume-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  .resume-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:26px;
+    display:flex; flex-direction:column; transition:border-color .4s, transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55), box-shadow .4s;
+  }
+  .resume-card:hover{border-color:var(--accent); transform:translateY(-6px) scale(1.02); box-shadow:0 14px 30px -12px rgba(0,85,255,0.4);}
+  .resume-tag{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--red); font-weight:600; margin-bottom:10px; letter-spacing:0.06em;}
+  .resume-title{font-size:19px; font-weight:600; margin-bottom:8px;}
+  .resume-desc{color:var(--muted); font-size:14px; margin-bottom:16px;}
+  .resume-card .chip-row{margin-bottom:22px;}
+  .resume-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:auto;}
+
+  /* CERTIFICATION SPOTLIGHT */
+  .cert-card{
+    display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center;
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:30px;
+    transition:border-color .4s, box-shadow .4s;
+  }
+  .cert-card:hover{border-color:var(--accent); box-shadow:0 14px 30px -12px rgba(0,85,255,0.4);}
+  .cert-badge{
+    width:120px; height:120px; border-radius:14px; background:#fff; color:#1F70C1;
+    display:flex; align-items:center; justify-content:center; padding:18px;
+    box-shadow:0 0 0 4px var(--surface-2), 0 0 0 5px var(--line);
+  }
+  .cert-badge img{width:100%; height:auto; display:block;}
+  .cert-issuer{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent); margin-bottom:6px;}
+  .cert-title{font-size:21px; font-weight:600; margin-bottom:12px; line-height:1.3;}
+  .cert-meta{list-style:none; color:var(--muted); font-size:13.5px; margin-bottom:18px;}
+  .cert-meta li{margin-bottom:4px;}
+  .cert-meta b{color:var(--text); font-weight:500;}
+  .cert-meta .mono{color:var(--red); font-size:13px;}
+  .cert-actions{display:flex; gap:10px; flex-wrap:wrap;}
+
   footer{border-top:1px solid var(--line); padding:48px 0 60px;}
   .foot-grid{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;}
   .foot-links{display:flex; gap:22px; font-size:14px; color:var(--muted);}
@@ -341,7 +376,9 @@
   @media(max-width:760px){
     .hero-grid{grid-template-columns:1fr;}
     .hero-grid .photo-frame{max-width:280px; order:-1;}
-    .proj-grid, .skill-groups, .edu-cert-grid{grid-template-columns:1fr;}
+    .proj-grid, .skill-groups, .edu-cert-grid, .resume-grid{grid-template-columns:1fr;}
+    .cert-card{grid-template-columns:1fr; padding:24px;}
+    .cert-badge{width:96px; height:96px; padding:14px;}
     .proj-grid::before{display:none;}
     .proj-card:nth-child(even){margin-top:0;}
     .proj-anchor{display:none;}
@@ -366,6 +403,8 @@
       <li><a href="#experience" data-sec="experience">Experience</a></li>
       <li><a href="#projects" data-sec="projects">Projects</a></li>
       <li><a href="#skills" data-sec="skills">Skills</a></li>
+      <li><a href="#resume" data-sec="resume">Resume</a></li>
+      <li><a href="#certifications" data-sec="certifications">Certifications</a></li>
       <li><a href="#education" data-sec="education">Education</a></li>
     </ul>
     <a class="nav-cta" href="mailto:abinanil000@gmail.com">Contact</a>
@@ -375,6 +414,8 @@
     <a href="#experience">Experience</a>
     <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
+    <a href="#resume">Resume</a>
+    <a href="#certifications">Certifications</a>
     <a href="#education">Education</a>
   </div>
 </nav>
@@ -424,7 +465,8 @@
         <div class="hero-links">
           <a class="btn btn-solid" href="mailto:abinanil000@gmail.com">Get in touch</a>
           <a class="btn btn-line" href="#projects">View projects</a>
-          <a class="btn btn-line" href="#" target="_blank">GitHub ↗</a>
+          <a class="btn btn-line" href="#resume">Resumes</a>
+          <a class="btn btn-line" href="https://github.com/abinanil000datascience" target="_blank" rel="noopener">GitHub ↗</a>
         </div>
       </div>
       <div class="photo-frame">
@@ -585,9 +627,65 @@
   </div>
 </section>
 
+<section id="resume">
+  <div class="wrap">
+    <div class="sec-head reveal glitch-hover"><span class="sec-num">04</span><h2>Resume</h2><span class="sec-rule"></span></div>
+    <p class="reveal mono" style="color:var(--muted); font-size:13px; margin-top:-24px; margin-bottom:28px;">Two versions, tailored by role. Pick the one that fits.</p>
+
+    <div class="resume-grid">
+      <div class="resume-card web-stuck reveal">
+        <div class="resume-tag">AI / ML ENGINEER</div>
+        <div class="resume-title">AI &amp; Machine Learning Resume</div>
+        <div class="resume-desc">RAG pipelines, LLM applications, agentic systems, fine-tuning, and MLOps.</div>
+        <div class="chip-row"><span class="chip">RAG</span><span class="chip">LangChain</span><span class="chip">LangGraph</span><span class="chip">QLoRA</span><span class="chip">pgvector</span></div>
+        <div class="resume-actions">
+          <a class="btn btn-solid" href="Abin_Anil_AIML_Resume.pdf" target="_blank" rel="noopener">View PDF</a>
+          <a class="btn btn-line" href="Abin_Anil_AIML_Resume.pdf" download>Download</a>
+        </div>
+      </div>
+
+      <div class="resume-card web-stuck reveal">
+        <div class="resume-tag">BACKEND ENGINEER</div>
+        <div class="resume-title">Backend Engineering Resume</div>
+        <div class="resume-desc">APIs, data pipelines, microservices, CI/CD, and production support.</div>
+        <div class="chip-row"><span class="chip">FastAPI</span><span class="chip">Django REST</span><span class="chip">Kafka</span><span class="chip">PostgreSQL</span><span class="chip">Docker</span></div>
+        <div class="resume-actions">
+          <a class="btn btn-solid" href="Abin_Anil_Backend_Resume.pdf" target="_blank" rel="noopener">View PDF</a>
+          <a class="btn btn-line" href="Abin_Anil_Backend_Resume.pdf" download>Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certifications">
+  <div class="wrap">
+    <div class="sec-head reveal glitch-hover"><span class="sec-num">05</span><h2>Certifications</h2><span class="sec-rule"></span></div>
+
+    <div class="cert-card web-stuck reveal">
+      <div class="cert-badge"><img src="IBM-logo.png" alt="IBM logo"></div>
+      <div>
+        <div class="cert-issuer">IBM Certification</div>
+        <div class="cert-title">Fundamentals of AI Agents Using RAG and LangChain</div>
+        <ul class="cert-meta">
+          <li><b>Issued:</b> Sep 29, 2026</li>
+          <li><b>Credential ID:</b> <span class="mono">S0HTSWVNLSTW</span></li>
+          <li><b>Instructors:</b> Ashutosh Sagar, Fateme Akbari, Joseph Santarcangelo, Kang Wang</li>
+        </ul>
+        <div class="chip-row" style="margin-bottom:20px;"><span class="chip">RAG</span><span class="chip">LangChain</span><span class="chip">AI Agents</span></div>
+        <div class="cert-actions">
+          <a class="btn btn-solid" href="https://coursera.org/verify/S0HTSWVNLSTW" target="_blank" rel="noopener">Verify credential ↗</a>
+          <a class="btn btn-line" href="https://coursera.org/share/44743a30aada3d0022467c5355131a41" target="_blank" rel="noopener">Certificate link ↗</a>
+          <a class="btn btn-line" href="Fundamentals_of_AI_Agents.pdf" target="_blank" rel="noopener">View certificate</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="education">
   <div class="wrap">
-    <div class="sec-head reveal glitch-hover"><span class="sec-num">04</span><h2>Education &amp; Certifications</h2><span class="sec-rule"></span></div>
+    <div class="sec-head reveal glitch-hover"><span class="sec-num">06</span><h2>Education &amp; Training</h2><span class="sec-rule"></span></div>
 
     <div class="edu-cert-grid reveal">
       <div>
@@ -623,7 +721,7 @@
       <button id="copyEmail" class="mono">abinanil000@gmail.com</button>
       <a href="tel:+919656768702">+91 96567 68702</a>
       <a href="#">LinkedIn</a>
-      <a href="#">GitHub</a>
+      <a href="https://github.com/abinanil000datascience" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 </footer>
